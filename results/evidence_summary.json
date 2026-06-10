@@ -1,0 +1,66 @@
+{
+  "seed_count": 80,
+  "episodes_per_method": 5,
+  "summary": [
+    {
+      "strategy": "nominal_no_repair",
+      "display": "Nominal, no repair",
+      "first_episode_success_rate": 0.0,
+      "all_episode_success_rate": 0.0,
+      "mean_first_episode_counterexamples": 114.5625,
+      "mean_counterexamples_per_episode": 114.5625,
+      "mean_first_episode_steps": 120.0,
+      "mean_initial_prediction_error": 0.003680555555555556,
+      "mean_final_prediction_error": 0.003680555555555556,
+      "median_final_prediction_error": 0.003703703703703704
+    },
+    {
+      "strategy": "prediction_gated_repair",
+      "display": "Prediction-gated repair",
+      "first_episode_success_rate": 1.0,
+      "all_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 8.0,
+      "mean_counterexamples_per_episode": 1.6,
+      "mean_first_episode_steps": 24.0,
+      "mean_initial_prediction_error": 0.003680555555555556,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "median_final_prediction_error": 0.001851851851851852
+    },
+    {
+      "strategy": "ccra_exact_guard",
+      "display": "CCRA exact guard",
+      "first_episode_success_rate": 1.0,
+      "all_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 1.0,
+      "mean_counterexamples_per_episode": 0.2,
+      "mean_first_episode_steps": 17.0,
+      "mean_initial_prediction_error": 0.003680555555555556,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "median_final_prediction_error": 0.001851851851851852
+    },
+    {
+      "strategy": "ccra_row_guard",
+      "display": "CCRA row guard",
+      "first_episode_success_rate": 1.0,
+      "all_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 1.0,
+      "mean_counterexamples_per_episode": 0.2,
+      "mean_first_episode_steps": 17.0,
+      "mean_initial_prediction_error": 0.003680555555555556,
+      "mean_final_prediction_error": 0.02224537037037037,
+      "median_final_prediction_error": 0.022222222222222223
+    },
+    {
+      "strategy": "oracle_fault_model",
+      "display": "Oracle fault model",
+      "first_episode_success_rate": 1.0,
+      "all_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 0.0,
+      "mean_counterexamples_per_episode": 0.0,
+      "mean_first_episode_steps": 16.0,
+      "mean_initial_prediction_error": 0.0,
+      "mean_final_prediction_error": 0.0,
+      "median_final_prediction_error": 0.0
+    }
+  ]
+}
