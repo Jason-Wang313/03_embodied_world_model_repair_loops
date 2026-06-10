@@ -1,26 +1,33 @@
 # Child Status
 
-- Stage: final audit written
-- Current action: pre-commit file hygiene check, then commit and push
+- Stage: complete
+- Current action: final verification after successful public push
 - Commands run:
   - wrote `plan.md`
-  - wrote/replaced `child_status.md`
-  - inspected repo files and recovery notes
-  - validated literature/evidence artifacts
+  - inspected retry artifacts and reused valid literature/evidence outputs
+  - validated `docs/related_work_matrix.csv`: 1017 lines including header, 1016 entries
+  - read literature, novelty, hostile prior-work, claims, reviewer-attack, and evidence docs
   - `python scripts\smoke_test.py` -> `smoke_exit=0`
-  - web verification: ICLR 2026 Author Guide points to official `iclr2026.zip`
+  - verified at runtime that the ICLR 2026 Author Guide points to official `iclr2026.zip`
   - `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` -> `latexmk_exit=1`
-  - successful manual build after patch: `pdflatex1=0`, `bibtex=0`, `pdflatex2=0`, `pdflatex3=0`
-  - copied PDF to `C:\Users\wangz\Downloads\03.pdf`
-  - checked `gh auth status` -> authenticated as `Jason-Wang313`
+  - recovered with manual `pdflatex`, `bibtex`, `pdflatex`, `pdflatex`
+  - patched `paper/main.tex` to use `\path{...}` for appendix filenames
+  - successful final build: `pdflatex1=0`, `bibtex=0`, `pdflatex2=0`, `pdflatex3=0`
+  - copied final PDF to `C:\Users\wangz\Downloads\03.pdf`
+  - removed generated `paper/main.pdf` after copying the required deliverable
+  - checked final LaTeX log for fatal/unresolved citation/reference errors -> none found
+  - checked `C:\Users\wangz\OneDrive\Desktop\03.pdf` -> absent
   - created public repo `https://github.com/Jason-Wang313/03_embodied_world_model_repair_loops`
-  - added `docs/final_audit.md`
+  - committed root artifact commit `f2d7e4c`
+  - pushed `master` to `origin/master` -> `git_push_exit=0`
 - Findings:
-  - Final PDF exists at required Downloads path, 197056 bytes.
-  - Desktop PDF is absent; final audit says `pending orchestrator copy`.
-  - Public GitHub repo exists and `origin` is configured.
+  - Final thesis: planner-facing counterexample-conditioned repair loops for robot world models.
+  - Final PDF exists at `C:\Users\wangz\Downloads\03.pdf`, 197056 bytes, SHA256 `1C81652DC03BF3AF2E9F54B9D404A95FF6092C040673A7FB92B7D547043654EE`.
+  - Desktop copy status is `pending orchestrator copy`.
+  - Large cache `results/openalex_cache.jsonl` is ignored by `.gitignore` and was not pushed.
 - Failures:
-  - `latexmk_exit=1`; missing script engine `perl`.
-  - Initial manual build failed on underscores in `\texttt{...}`; patched.
+  - `latexmk_exit=1`; MiKTeX could not find Perl.
+  - Initial manual LaTeX build failed on underscores in `\texttt{...}`; fixed.
 - Recovery steps:
-  - Use manual LaTeX/BibTeX passes in this environment.
+  - Used explicit manual LaTeX/BibTeX passes.
+  - Kept final PDF only at the required Downloads path.
