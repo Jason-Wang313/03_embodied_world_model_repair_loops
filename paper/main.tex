@@ -1,0 +1,173 @@
+\documentclass{article}
+
+\usepackage{iclr2026_conference,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+\input{math_commands.tex}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+
+\title{Embodied World Model Repair Loops}
+
+\author{Anonymous Authors\\
+Paper under double-blind review}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Robot world models are usually improved by making future predictions more accurate, more uncertain, or more robustly pretrained. For embodied planning, this misses a sharper failure mode: a planner can repeatedly exploit a rare false transition whose contribution to average prediction loss is nearly zero. We propose \emph{Counterexample-Conditioned Repair Automata} (CCRA), a planner-facing world-model wrapper that treats execution contradictions as repair obligations. A CCRA stores guarded transition patches induced by state-action-outcome counterexamples and rolls out the patched transition relation during subsequent planning. The mechanism is deliberately narrow: it is not a larger predictor, a detached verifier, or global online system identification. In deterministic finite models with exact guards, one observed contradiction is enough to prevent repeated reliance on the same false transition. In 80 seeded sparse-contact grid worlds, a nominal model has low full-transition error (0.004) but zero first-episode task success because the planner repeatedly chooses a false shortcut. Exact CCRA reaches 1.00 first-episode success after one counterexample on average; a deliberately broad row-guard CCRA also reaches 1.00 success while worsening global prediction error to 0.022. The result supports a modest thesis: for embodied agents, the central update target should sometimes be the planner-facing transition contract, not next-state prediction quality.
+\end{abstract}
+
+\section{Introduction}
+
+World models for robots promise a compact contract between perception, action, and physical consequence. Learned dynamics and latent imagination have made this contract useful for planning and control \citep{deisenroth2013gp,chua2018pets,hafner2019planet,hafner2020dreamer}; visual foresight and robot MPC show how action-conditioned prediction can guide manipulation \citep{lenz2015deepmpc,ebert2018visual,nagabandi2018neural}; and sim-to-real methods try to make the contract survive deployment shift \citep{tobin2017domain,tan2018sim,jeong2020self}. These methods differ technically, but they often share a tacit update target: make the model more predictive under a training, rollout, uncertainty, or adaptation objective.
+
+Embodied planning exposes a different target. A planner is not a passive evaluator of model error. It searches for cheap, high-value trajectories, and therefore actively concentrates execution on transitions that look useful under the model. A rare false affordance can dominate behavior even if it barely affects average one-step prediction loss. A push that should slide an object but jams, a wheel command that should cross a patch but slips, or a gripper motion that should clear an obstacle but catches can become a repeated exploit: the planner keeps returning to the same modeled shortcut because nothing in the transition relation has changed.
+
+This paper asks whether online repair, rather than prediction quality, should be the mechanism at the center of some robot world-model papers. We answer with a deliberately small mechanism: \emph{Counterexample-Conditioned Repair Automata} (CCRA). A CCRA wraps a nominal transition model with ordered guarded patches. When execution observes that the model's predicted outcome for a state-action pair is false, the system installs a scoped patch that future planning must obey. The patch can be an exact replacement transition, a forbidden affordance, or a broader guarded edit. The repair is local, immediate, and planner-facing.
+
+Our contribution is not that robots should adapt online; online dynamics adaptation, system identification, residual policies, and domain randomization are already strong prior art \citep{fu2016oneshot,yu2017uposi,christiano2016sim,chi2022residual}. Nor is the proposal merely to add uncertainty, active learning, or a verifier \citep{chua2018pets,alshiekh2018shielding}. The update changes the transition relation used in future search. The paper's narrow claim is that this distinction matters when sparse physical counterexamples are planner-attractive.
+
+We make three contributions.
+\begin{enumerate}
+    \item We define CCRA as a planner-facing repair wrapper for embodied world models.
+    \item We prove a no-repeat lemma: under deterministic finite dynamics and exact guards, one counterexample prevents the planner from relying on the same false transition again.
+    \item We provide runnable evidence in a sparse-contact grid-control testbed showing that success can improve even when global prediction error does not.
+\end{enumerate}
+
+\section{Field Assumption and Prior-Work Boundary}
+
+We performed a landscape sweep of 1,016 robot world-model, dynamics, planning, manipulation, contact, and sim-to-real papers, followed by a serious skim of 300, a 240-paper deep read, and a 100-paper hostile prior-work set. The matrix and extraction fields are included with the repository. The sweep suggests a crowded field box: learned dynamics plus MPC, contact and tactile dynamics, sim-to-real transfer, visual foresight, uncertainty-aware models, residual correction, online system identification, and language-conditioned robot planning.
+
+The hostile boundary is straightforward. Learned dynamics for planning is not new \citep{lenz2015deepmpc,nagabandi2018neural,chua2018pets}. Latent imagination is not new \citep{ha2018worldmodels,hafner2019planet,hafner2020dreamer}. Visual prediction for robot control is not new \citep{ebert2018visual}. Online adaptation and system identification are not new \citep{fu2016oneshot,yu2017uposi,tan2018sim}. Domain randomization and sim-to-real adaptation are not new \citep{tobin2017domain,christiano2016sim,jeong2020self}. Residual correction and movement-primitives-based adaptation are not new \citep{ijspeert2013dmp,chi2022residual}. Foundation-model robot planning is not new either \citep{huang2023voxposer}.
+
+The assumption left exposed is narrower:
+\begin{quote}
+\emph{The world-model update that matters for control can be obtained by improving average future prediction or globally adapting the dynamics model.}
+\end{quote}
+This can fail when the deployment-critical error is sparse, discontinuous, and actively selected by the planner. In that case the model does not need to become globally better before the next action; it needs to stop authorizing one false transition. Planning model reconciliation in AI planning also studies model changes \citep{chakraborti2017modelreconciliation}, but its usual target is explanatory alignment between agents. CCRA instead uses physical execution contradictions to change the transition relation consumed by robot planning.
+
+\section{Counterexample-Conditioned Repair Automata}
+
+Let $S$ be a finite or discretized state space, $A$ an action set, and $T_0:S \times A \rightarrow S$ a nominal deterministic transition model used by a planner. The real environment has transition $T^\star$, which is queried only by execution. A plan $\pi=(a_0,\ldots,a_{H-1})$ is generated by rolling out the model used by the planner.
+
+\begin{definition}[Repair patch]
+A repair patch is a tuple $p=(g,\rho,c,o)$ where $g:S\times A\rightarrow\{0,1\}$ is a guard, $\rho:S\times A\rightarrow S$ is a replacement transition or forbidden-affordance operator, $c$ is support metadata, and $o$ is a planner-facing obligation. A patch applies to $(s,a)$ if $g(s,a)=1$.
+\end{definition}
+
+\begin{definition}[CCRA transition model]
+Given a nominal model $T_0$ and ordered patches $P=(p_1,\ldots,p_k)$, the CCRA transition model is
+\[
+T_P(s,a) =
+\begin{cases}
+\rho_i(s,a) & \text{for the first } p_i \in P \text{ such that } g_i(s,a)=1,\\
+T_0(s,a) & \text{if no patch applies.}
+\end{cases}
+\]
+The planner rolls out $T_P$ rather than $T_0$.
+\end{definition}
+
+During execution, the robot plans with $T_P$, executes the first action, and observes $s'=T^\star(s,a)$. If $T_P(s,a)\neq s'$, it creates or strengthens a patch. The exact guard variant uses $g_{s,a}(\bar{s},\bar{a})=1$ iff $(\bar{s},\bar{a})=(s,a)$ and $\rho_{s,a}(\bar{s},\bar{a})=s'$. A forbidden-affordance variant can set $\rho(s,a)=s$ when the planned effect did not occur. Broader guards can generalize across sensed contact modes, object classes, or local geometry; they are useful but can over-repair.
+
+The algorithm is simple:
+\[
+\begin{array}{ll}
+\textbf{loop} & \text{plan a path with } T_P\\
+              & \text{execute the first action } a \text{ in state } s\\
+              & \text{observe } s' \\
+              & \text{if } T_P(s,a)\neq s' \text{, add or update a guarded patch}\\
+              & \text{continue from } s'
+\end{array}
+\]
+
+CCRA intentionally separates repair from full model learning. A later learner may consolidate patches into a neural dynamics model, a simulator parameter, or a richer symbolic abstraction, but the immediate control loop does not wait for that consolidation.
+
+\section{A Narrow Formal Guarantee}
+
+The formal claim is deliberately modest. It is included to pin down the mechanism, not to imply scalability.
+
+\begin{lemma}[No exact repeated exploitation]
+Consider a deterministic finite environment and a deterministic planner that respects $T_P$. Suppose execution at $(s,a)$ observes $s^\star\neq T_P(s,a)$ and CCRA installs an exact patch $p$ with guard $g(\bar{s},\bar{a})=1$ iff $(\bar{s},\bar{a})=(s,a)$ and replacement $\rho(s,a)=s^\star$. Then any future plan produced by rolling out the patched model cannot depend on the old transition $T_P(s,a)$ for that same state-action pair, unless the planner ignores the patch or no valid alternative exists under its search criterion.
+\end{lemma}
+
+\begin{proof}
+After insertion, the ordered patched model returns $\rho(s,a)=s^\star$ for $(s,a)$ before consulting the previous transition. Therefore every future rollout that contains $(s,a)$ simulates $s^\star$, not the old successor. A plan whose validity requires the old successor is not valid under the model the planner now rolls out. The only exceptions are outside the premise: the planner does not respect $T_P$, or its search returns no alternative and accepts failure.
+\end{proof}
+
+This lemma is almost tautological, and that is the point. If a robot observes that a transition is false, the minimum repair loop should make the next planner call unable to exploit that same false transition. Prediction-centric updating does not provide this guarantee unless it immediately changes the planner-facing transition at the offending guard.
+
+\section{Runnable Evidence}
+
+\paragraph{Environment.}
+We implement a deterministic embodied-control proxy: a robot moves on a $15\times 9$ grid from left to right. The nominal world model knows grid boundaries and empty cells. The true world includes one to three sparse one-way contact faults on the shortest row: action \texttt{R} at selected states leaves the robot in place. These faults represent local physical affordance failures such as sticking, jamming, slipping, or a changed contact patch. They are rare in the transition table but lie on the planner-preferred route.
+
+\paragraph{Methods.}
+We compare five planner-facing models over 80 random seeds and five deployment episodes per method:
+\begin{itemize}
+    \item \textbf{Nominal, no repair}: always plans with $T_0$.
+    \item \textbf{Prediction-gated repair}: counts prediction mismatches and blocks a transition only after eight repeated mismatches.
+    \item \textbf{CCRA exact guard}: installs an exact forbidden-affordance patch after one mismatch.
+    \item \textbf{CCRA row guard}: generalizes one mismatch to all rightward actions in the same row, intentionally over-repairing.
+    \item \textbf{Oracle fault model}: plans with the true transition relation.
+\end{itemize}
+
+The main metric is first-episode success and the number of first-episode counterexamples. We also report full-transition prediction error over all states and actions. This matters because our thesis predicts a possible divergence between global prediction error and embodied usefulness.
+
+\begin{table}[t]
+\centering
+\small
+\input{figures/results_table.tex}
+\caption{Sparse critical errors can be almost invisible to average prediction error while dominating planning. CCRA exact and row guards solve after one first-episode counterexample on average. The row guard is intentionally over-broad: it has worse final prediction error than the nominal model while achieving perfect first-episode success.}
+\label{tab:results}
+\end{table}
+
+\paragraph{Results.}
+Table~\ref{tab:results} shows the decoupling. The nominal model's average prediction error is only 0.004, but first-episode success is 0.00 because the planner repeatedly selects the false shortcut. Prediction-gated repair eventually fixes the route, but only after 8.0 counterexamples on average in the first episode. Exact CCRA succeeds after 1.0 counterexample. The row-guard CCRA also succeeds after 1.0 counterexample while increasing final prediction error to 0.022, worse than the unrepaired nominal model. In this setting, task success tracks whether the planner-facing transition relation was repaired, not whether average transition error decreased.
+
+\paragraph{Interpretation.}
+The experiment is small by design. It does not show that CCRA scales to raw pixels, tactile arrays, deformable manipulation, or real robot foundation models. It demonstrates a mechanism-level fact: a sparse false transition can be almost irrelevant to global prediction loss and decisive for planning. A repair loop that writes to the planner-facing model can be preferable to a prediction-centric update even when the latter has a better global prediction score.
+
+\section{Discussion}
+
+CCRA suggests a different unit of world-model improvement. Instead of asking only whether a model predicts the next frame or latent state well, an embodied agent should ask whether the planner is still authorized to rely on a transition that execution has contradicted. The repair patch is a small object: a guard, a replacement or blocked affordance, support metadata, and a planner obligation. The value comes from where the object sits in the loop. It is consulted before planning continues.
+
+The most important design choice is guard scope. Exact guards are safe but may require many failures to cover a contact mode. Broad guards can generalize quickly but may over-repair, as the row-guard result illustrates. In physical robots, guards should bind to sensed local contact state, geometry, object identity, gripper condition, or recent interaction mode. Support counts and invalidation tests are needed when the world changes again. These pieces are engineering work, not solved here.
+
+CCRA is compatible with learned models. A vision-language-action model, latent dynamics model, or simulator can remain the nominal model $T_0$. The repair loop adds a deployment-time layer that grounded execution can use to override an attractive false affordance. This is especially important when semantic or visual priors are confident but local physics disagrees.
+
+\section{Limitations}
+
+The evidence is a deterministic finite-grid proxy. It intentionally isolates planner exploitation of sparse transition errors but omits perception, continuous control, stochastic contact, latency, safety constraints, and high-dimensional manipulation. The formal lemma only covers exact guards and deterministic transitions. The literature sweep supports novelty boundary setting, not a claim that no prior system has any repair-like behavior. The strongest appropriate venue judgment is therefore ``revise or workshop'' unless the mechanism is extended with contact-rich robot experiments, stronger guard learning, and stale-patch retirement.
+
+\section{Conclusion}
+
+Embodied world models should sometimes be repaired where they are used: inside the planner-facing transition relation. Counterexample-Conditioned Repair Automata are a minimal mechanism for doing so. The evidence is small but sharp: a model can be globally more predictive and still worse for action, while a local repair can worsen average prediction error and improve embodied success. That is the assumption this paper breaks.
+
+\bibliography{references}
+\bibliographystyle{iclr2026_conference}
+
+\appendix
+
+\section{Artifact Notes}
+
+The repository includes the literature matrix, hostile prior-work set, novelty boundary documents, simulator code, cached experimental outputs, and a smoke test. The main reproducibility commands are:
+\begin{verbatim}
+python scripts/smoke_test.py
+python scripts/run_evidence.py
+\end{verbatim}
+The full experiment writes \path{results/evidence_trials.csv}, \path{results/evidence_summary.json}, \path{results/repair_loop_results.svg}, and \path{paper/figures/results_table.tex}.
+
+\section{Literature Sweep Protocol}
+
+The sweep used public scholarly metadata queries around robot world models, learned dynamics, visual foresight, manipulation, contact, sim-to-real transfer, online system identification, residual correction, active exploration, and foundation-model robotics. Each matrix row records the claimed problem, mechanism introduced, hidden assumptions, fixed variables, ignored failure modes, novelty pressure, and remaining opening. The paper direction was chosen only after constructing the 100-paper hostile prior-work set.
+
+\end{document}

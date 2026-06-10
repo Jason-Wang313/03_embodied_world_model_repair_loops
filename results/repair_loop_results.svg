@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="420" viewBox="0 0 920 420">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="28" y="32" font-family="Arial" font-size="20" font-weight="700">Repair loops trade prediction loss for fewer repeated model exploits</text>
+<text x="28" y="54" font-family="Arial" font-size="13" fill="#555">Bars show first-episode counterexamples; labels show final full-transition prediction error and success.</text>
+<text x="28" y="81" font-family="Arial" font-size="13">Nominal, no repair</text>
+<rect x="180" y="64" width="520" height="24" fill="#444444"/>
+<text x="708" y="81" font-family="Arial" font-size="13">114.6 exploits, pred err 0.004, success 0.00</text>
+<text x="28" y="129" font-family="Arial" font-size="13">Prediction-gated repair</text>
+<rect x="180" y="112" width="36" height="24" fill="#1b6ca8"/>
+<text x="224" y="129" font-family="Arial" font-size="13">8.0 exploits, pred err 0.002, success 1.00</text>
+<text x="28" y="177" font-family="Arial" font-size="13">CCRA exact guard</text>
+<rect x="180" y="160" width="4" height="24" fill="#2a9d55"/>
+<text x="192" y="177" font-family="Arial" font-size="13">1.0 exploits, pred err 0.002, success 1.00</text>
+<text x="28" y="225" font-family="Arial" font-size="13">CCRA row guard</text>
+<rect x="180" y="208" width="4" height="24" fill="#b45f06"/>
+<text x="192" y="225" font-family="Arial" font-size="13">1.0 exploits, pred err 0.022, success 1.00</text>
+<text x="28" y="273" font-family="Arial" font-size="13">Oracle fault model</text>
+<rect x="180" y="256" width="0" height="24" fill="#6a4c93"/>
+<text x="188" y="273" font-family="Arial" font-size="13">0.0 exploits, pred err 0.000, success 1.00</text>
+<line x1="180" y1="314" x2="700" y2="314" stroke="#222"/>
+<text x="180" y="334" font-family="Arial" font-size="12">0</text>
+<text x="660" y="334" font-family="Arial" font-size="12">114.6 mean first-episode counterexamples</text>
+<text x="28" y="396" font-family="Arial" font-size="12" fill="#555">Maximum final prediction error in this run: 0.022. The broad CCRA row guard intentionally over-repairs but still reaches the goal.</text>
+</svg>
