@@ -29,3 +29,9 @@ A detached shield can block an action, but the novelty claim is updating the tra
 
 ## Attack 10: The formal lemma is trivial.
 It is intentionally simple. Its role is to pin down the mechanism, not to be a deep theorem. The paper must lean on empirical decoupling of prediction loss and task success.
+
+## Attack 11: Exact CCRA is just blocking a failed transition after one mismatch.
+Concede in v2. The threshold sweep shows threshold 1 is behaviorally equivalent to exact CCRA in the deterministic grid. The defensible contribution is the planner-facing repair obligation and the evaluation target, not a complicated algorithm.
+
+## Attack 12: The prediction-gated baseline is arbitrarily weak at threshold 8.
+Partly true. v2 adds thresholds 1, 2, 4, 8, and 16. Higher thresholds force exactly that many first-episode counterexamples before repair in this setup. Threshold 1 recovers exact CCRA behavior.

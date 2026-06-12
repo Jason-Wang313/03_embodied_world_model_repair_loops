@@ -8,10 +8,12 @@
       "first_episode_success_rate": 0.0,
       "all_episode_success_rate": 0.0,
       "mean_first_episode_counterexamples": 114.5625,
+      "ci95_first_episode_counterexamples": 0.4916641046203718,
       "mean_counterexamples_per_episode": 114.5625,
       "mean_first_episode_steps": 120.0,
       "mean_initial_prediction_error": 0.003680555555555556,
       "mean_final_prediction_error": 0.003680555555555556,
+      "ci95_final_prediction_error": 0.00033234602376502686,
       "median_final_prediction_error": 0.003703703703703704
     },
     {
@@ -20,10 +22,12 @@
       "first_episode_success_rate": 1.0,
       "all_episode_success_rate": 1.0,
       "mean_first_episode_counterexamples": 8.0,
+      "ci95_first_episode_counterexamples": 0.0,
       "mean_counterexamples_per_episode": 1.6,
       "mean_first_episode_steps": 24.0,
       "mean_initial_prediction_error": 0.003680555555555556,
       "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686,
       "median_final_prediction_error": 0.001851851851851852
     },
     {
@@ -32,10 +36,12 @@
       "first_episode_success_rate": 1.0,
       "all_episode_success_rate": 1.0,
       "mean_first_episode_counterexamples": 1.0,
+      "ci95_first_episode_counterexamples": 0.0,
       "mean_counterexamples_per_episode": 0.2,
       "mean_first_episode_steps": 17.0,
       "mean_initial_prediction_error": 0.003680555555555556,
       "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686,
       "median_final_prediction_error": 0.001851851851851852
     },
     {
@@ -44,10 +50,12 @@
       "first_episode_success_rate": 1.0,
       "all_episode_success_rate": 1.0,
       "mean_first_episode_counterexamples": 1.0,
+      "ci95_first_episode_counterexamples": 0.0,
       "mean_counterexamples_per_episode": 0.2,
       "mean_first_episode_steps": 17.0,
       "mean_initial_prediction_error": 0.003680555555555556,
       "mean_final_prediction_error": 0.02224537037037037,
+      "ci95_final_prediction_error": 0.0003323460237650267,
       "median_final_prediction_error": 0.022222222222222223
     },
     {
@@ -56,11 +64,55 @@
       "first_episode_success_rate": 1.0,
       "all_episode_success_rate": 1.0,
       "mean_first_episode_counterexamples": 0.0,
+      "ci95_first_episode_counterexamples": 0.0,
       "mean_counterexamples_per_episode": 0.0,
       "mean_first_episode_steps": 16.0,
       "mean_initial_prediction_error": 0.0,
       "mean_final_prediction_error": 0.0,
+      "ci95_final_prediction_error": 0.0,
       "median_final_prediction_error": 0.0
+    }
+  ],
+  "threshold_sweep": [
+    {
+      "threshold": 1,
+      "first_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 1.0,
+      "ci95_first_episode_counterexamples": 0.0,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686
+    },
+    {
+      "threshold": 2,
+      "first_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 2.0,
+      "ci95_first_episode_counterexamples": 0.0,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686
+    },
+    {
+      "threshold": 4,
+      "first_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 4.0,
+      "ci95_first_episode_counterexamples": 0.0,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686
+    },
+    {
+      "threshold": 8,
+      "first_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 8.0,
+      "ci95_first_episode_counterexamples": 0.0,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686
+    },
+    {
+      "threshold": 16,
+      "first_episode_success_rate": 1.0,
+      "mean_first_episode_counterexamples": 16.0,
+      "ci95_first_episode_counterexamples": 0.0,
+      "mean_final_prediction_error": 0.001828703703703704,
+      "ci95_final_prediction_error": 0.00033234602376502686
     }
   ]
 }

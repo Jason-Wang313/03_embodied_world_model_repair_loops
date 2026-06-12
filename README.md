@@ -32,8 +32,10 @@ The full run writes:
 - `results/evidence_trials.csv`
 - `results/evidence_summary.csv`
 - `results/evidence_summary.json`
+- `results/threshold_sweep.csv`
 - `results/repair_loop_results.svg`
 - `paper/figures/results_table.tex`
+- `paper/figures/threshold_table.tex`
 
 ## Build Paper
 
@@ -60,3 +62,5 @@ Across 80 seeded sparse-contact grid worlds with five deployment episodes per me
 - CCRA row guard: 1.00 success, 1.0 counterexample, 0.022 final prediction error.
 
 The row-guard result is intentionally provocative: it solves the task while worsening average full-transition prediction error, showing why planner-facing repair can be a different objective from global predictive fidelity.
+
+Submission-hardening v2 adds a prediction-gated threshold sweep. The threshold-1 case is behaviorally equivalent to exact CCRA in this deterministic toy, so the narrowed claim is about immediate planner-facing repair obligations rather than a sophisticated new learning algorithm.
