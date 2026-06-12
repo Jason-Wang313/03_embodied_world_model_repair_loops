@@ -22,9 +22,12 @@ Paper under double-blind review}
 \begin{document}
 
 \maketitle
+\begin{center}
+{\small Submission-hardening version: v2 (2026-06-12).}
+\end{center}
 
 \begin{abstract}
-Robot world models are usually improved by making future predictions more accurate, more uncertain, or more robustly pretrained. For embodied planning, this misses a sharper failure mode: a planner can repeatedly exploit a rare false transition whose contribution to average prediction loss is nearly zero. We propose \emph{Counterexample-Conditioned Repair Automata} (CCRA), a planner-facing world-model wrapper that treats execution contradictions as repair obligations. A CCRA stores guarded transition patches induced by state-action-outcome counterexamples and rolls out the patched transition relation during subsequent planning. The mechanism is deliberately narrow: it is not a larger predictor, a detached verifier, or global online system identification. In deterministic finite models with exact guards, one observed contradiction is enough to prevent repeated reliance on the same false transition. In 80 seeded sparse-contact grid worlds, a nominal model has low full-transition error (0.004) but zero first-episode task success because the planner repeatedly chooses a false shortcut. Exact CCRA reaches 1.00 first-episode success after one counterexample on average; a deliberately broad row-guard CCRA also reaches 1.00 success while worsening global prediction error to 0.022. The result supports a modest thesis: for embodied agents, the central update target should sometimes be the planner-facing transition contract, not next-state prediction quality.
+Robot world models are usually improved by making future predictions more accurate, more uncertain, or more robustly pretrained. For embodied planning, this misses a sharper failure mode: a planner can repeatedly exploit a rare false transition whose contribution to average prediction loss is nearly zero. We propose \emph{Counterexample-Conditioned Repair Automata} (CCRA), a planner-facing world-model wrapper that treats execution contradictions as repair obligations. A CCRA stores guarded transition patches induced by state-action-outcome counterexamples and rolls out the patched transition relation during subsequent planning. The mechanism is deliberately narrow: it is not a larger predictor, a detached verifier, or global online system identification. In deterministic finite models with exact guards, one observed contradiction is enough to prevent repeated reliance on the same false transition. In 80 seeded sparse-contact grid worlds, a nominal model has low full-transition error (0.004) but zero first-episode task success because the planner repeatedly chooses a false shortcut. Exact CCRA reaches 1.00 first-episode success after one counterexample on average; a deliberately broad row-guard CCRA also reaches 1.00 success while worsening global prediction error to 0.022. A threshold sweep narrows the novelty: exact CCRA is behaviorally equivalent to one-mismatch transition blocking in this toy setting. The result supports a modest thesis: for embodied agents, the central update target should sometimes be the planner-facing transition contract, not next-state prediction quality.
 \end{abstract}
 
 \section{Introduction}
@@ -41,7 +44,7 @@ We make three contributions.
 \begin{enumerate}
     \item We define CCRA as a planner-facing repair wrapper for embodied world models.
     \item We prove a no-repeat lemma: under deterministic finite dynamics and exact guards, one counterexample prevents the planner from relying on the same false transition again.
-    \item We provide runnable evidence in a sparse-contact grid-control testbed showing that success can improve even when global prediction error does not.
+    \item We provide runnable evidence in a sparse-contact grid-control testbed showing that success can improve even when global prediction error does not, plus a threshold sweep showing that exact CCRA is equivalent to one-mismatch transition blocking in this toy setting.
 \end{enumerate}
 
 \section{Field Assumption and Prior-Work Boundary}
@@ -133,6 +136,16 @@ The main metric is first-episode success and the number of first-episode counter
 \paragraph{Results.}
 Table~\ref{tab:results} shows the decoupling. The nominal model's average prediction error is only 0.004, but first-episode success is 0.00 because the planner repeatedly selects the false shortcut. Prediction-gated repair eventually fixes the route, but only after 8.0 counterexamples on average in the first episode. Exact CCRA succeeds after 1.0 counterexample. The row-guard CCRA also succeeds after 1.0 counterexample while increasing final prediction error to 0.022, worse than the unrepaired nominal model. In this setting, task success tracks whether the planner-facing transition relation was repaired, not whether average transition error decreased.
 
+\begin{table}[t]
+\centering
+\small
+\input{figures/threshold_table.tex}
+\caption{Prediction-gated repair threshold sweep. Threshold 1 is behaviorally equivalent to exact CCRA in this deterministic grid because it blocks a contradicted transition after one mismatch. Higher thresholds preserve the same final prediction error but force repeated embodied counterexamples before the planner-facing model changes.}
+\label{tab:threshold}
+\end{table}
+
+Table~\ref{tab:threshold} is an intentionally hostile ablation. It shows that the paper should not claim CCRA is algorithmically complex or fundamentally different from one-mismatch transition blocking in the exact-guard deterministic case. The contribution is the planner-facing repair obligation and its evaluation target: stop authorizing a contradicted transition before the planner exploits it again.
+
 \paragraph{Interpretation.}
 The experiment is small by design. It does not show that CCRA scales to raw pixels, tactile arrays, deformable manipulation, or real robot foundation models. It demonstrates a mechanism-level fact: a sparse false transition can be almost irrelevant to global prediction loss and decisive for planning. A repair loop that writes to the planner-facing model can be preferable to a prediction-centric update even when the latter has a better global prediction score.
 
@@ -146,7 +159,7 @@ CCRA is compatible with learned models. A vision-language-action model, latent d
 
 \section{Limitations}
 
-The evidence is a deterministic finite-grid proxy. It intentionally isolates planner exploitation of sparse transition errors but omits perception, continuous control, stochastic contact, latency, safety constraints, and high-dimensional manipulation. The formal lemma only covers exact guards and deterministic transitions. The literature sweep supports novelty boundary setting, not a claim that no prior system has any repair-like behavior. The strongest appropriate venue judgment is therefore ``revise or workshop'' unless the mechanism is extended with contact-rich robot experiments, stronger guard learning, and stale-patch retirement.
+The evidence is a deterministic finite-grid proxy. It intentionally isolates planner exploitation of sparse transition errors but omits perception, continuous control, stochastic contact, latency, safety constraints, and high-dimensional manipulation. The formal lemma only covers exact guards and deterministic transitions. Submission-hardening v2 adds an important narrowing: exact CCRA is equivalent to threshold-one transition blocking in this toy implementation, so the claim is about where the repair lives in the planning loop and how it is evaluated, not about a sophisticated new learning algorithm. The literature sweep supports novelty boundary setting, not a claim that no prior system has any repair-like behavior. The strongest appropriate venue judgment is therefore ``revise or workshop'' unless the mechanism is extended with contact-rich robot experiments, stronger guard learning, and stale-patch retirement.
 
 \section{Conclusion}
 
@@ -164,7 +177,7 @@ The repository includes the literature matrix, hostile prior-work set, novelty b
 python scripts/smoke_test.py
 python scripts/run_evidence.py
 \end{verbatim}
-The full experiment writes \path{results/evidence_trials.csv}, \path{results/evidence_summary.json}, \path{results/repair_loop_results.svg}, and \path{paper/figures/results_table.tex}.
+The full experiment writes \path{results/evidence_trials.csv}, \path{results/evidence_summary.json}, \path{results/threshold_sweep.csv}, \path{results/repair_loop_results.svg}, \path{paper/figures/results_table.tex}, and \path{paper/figures/threshold_table.tex}.
 
 \section{Literature Sweep Protocol}
 

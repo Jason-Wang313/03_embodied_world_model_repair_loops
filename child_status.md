@@ -31,3 +31,20 @@
 - Recovery steps:
   - Used explicit manual LaTeX/BibTeX passes.
   - Kept final PDF only at the required Downloads path.
+
+Exit code: 0
+End time: 2026-06-11 00:05:22 +01:00
+PDF exists: True
+
+## Submission Hardening v2
+
+Completed: 2026-06-12 19:42:00 +01:00
+Terminal decision: workshop-only
+Canonical PDF: C:/Users/wangz/Downloads/03.pdf
+
+Key changes:
+- Added prediction-gated mismatch threshold sweep.
+- Added CI fields for counterexamples and final prediction error.
+- Added `paper/figures/threshold_table.tex` and `results/threshold_sweep.csv`.
+- Narrowed claims after threshold 1 matched exact CCRA in the deterministic toy grid.
+- Recompiled paper and replaced the canonical Downloads PDF.

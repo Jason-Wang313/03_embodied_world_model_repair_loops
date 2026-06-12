@@ -16,3 +16,4 @@ The nominal model has low average transition error because the faults are sparse
 - `results/evidence_summary.json`
 - `results/repair_loop_results.svg`
 - `paper/figures/results_table.tex`
+- `paper/figures/threshold_table.tex`

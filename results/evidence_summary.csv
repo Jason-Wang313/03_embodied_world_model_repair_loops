@@ -1,6 +1,6 @@
-strategy,display,first_episode_success_rate,all_episode_success_rate,mean_first_episode_counterexamples,mean_counterexamples_per_episode,mean_first_episode_steps,mean_initial_prediction_error,mean_final_prediction_error,median_final_prediction_error
-nominal_no_repair,"Nominal, no repair",0.0,0.0,114.5625,114.5625,120.0,0.003680555555555556,0.003680555555555556,0.003703703703703704
-prediction_gated_repair,Prediction-gated repair,1.0,1.0,8.0,1.6,24.0,0.003680555555555556,0.001828703703703704,0.001851851851851852
-ccra_exact_guard,CCRA exact guard,1.0,1.0,1.0,0.2,17.0,0.003680555555555556,0.001828703703703704,0.001851851851851852
-ccra_row_guard,CCRA row guard,1.0,1.0,1.0,0.2,17.0,0.003680555555555556,0.02224537037037037,0.022222222222222223
-oracle_fault_model,Oracle fault model,1.0,1.0,0.0,0.0,16.0,0.0,0.0,0.0
+strategy,display,first_episode_success_rate,all_episode_success_rate,mean_first_episode_counterexamples,ci95_first_episode_counterexamples,mean_counterexamples_per_episode,mean_first_episode_steps,mean_initial_prediction_error,mean_final_prediction_error,ci95_final_prediction_error,median_final_prediction_error
+nominal_no_repair,"Nominal, no repair",0.0,0.0,114.5625,0.4916641046203718,114.5625,120.0,0.003680555555555556,0.003680555555555556,0.00033234602376502686,0.003703703703703704
+prediction_gated_repair,Prediction-gated repair,1.0,1.0,8.0,0.0,1.6,24.0,0.003680555555555556,0.001828703703703704,0.00033234602376502686,0.001851851851851852
+ccra_exact_guard,CCRA exact guard,1.0,1.0,1.0,0.0,0.2,17.0,0.003680555555555556,0.001828703703703704,0.00033234602376502686,0.001851851851851852
+ccra_row_guard,CCRA row guard,1.0,1.0,1.0,0.0,0.2,17.0,0.003680555555555556,0.02224537037037037,0.0003323460237650267,0.022222222222222223
+oracle_fault_model,Oracle fault model,1.0,1.0,0.0,0.0,0.0,16.0,0.0,0.0,0.0,0.0
