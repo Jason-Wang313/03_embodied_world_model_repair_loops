@@ -1,0 +1,13 @@
+{
+  "total_rows": 34880,
+  "suite_rows": {
+    "critical_sparse_faults": 9720,
+    "guard_scope": 2100,
+    "nonstationary_retirement": 5760,
+    "planner_exploitation_stress": 5400,
+    "prediction_loss_decoupling": 4500,
+    "stochastic_contradictions": 5600,
+    "threshold_delay": 1800
+  },
+  "leaderboard_rows": 53
+}

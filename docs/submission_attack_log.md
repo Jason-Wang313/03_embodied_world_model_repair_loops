@@ -2,24 +2,25 @@
 
 Paper: 03_embodied_world_model_repair_loops
 
-Hardening version: v2
-Date: 2026-06-12 19:42:00 +01:00
+Hardening version: v3
+Date: 2026-06-13 20:15:00 +01:00
 
 ## Attack Rounds
 
 | Round | Attack | Action | Residual Risk |
 |---:|---|---|---|
-| 1 | Exact CCRA is just one-mismatch transition blocking. | Added threshold sweep and conceded equivalence. | High novelty pressure. |
-| 2 | Prediction-gated threshold 8 is arbitrary. | Added thresholds 1, 2, 4, 8, 16. | Other adaptive thresholds untested. |
-| 3 | Formal lemma is trivial. | Kept it as mechanism pin-down, not theorem depth. | Reviewers may still dislike it. |
-| 4 | Evidence is toy grid. | Marked workshop-only. | No real robot or high-fidelity sim. |
-| 5 | Prediction loss is a strawman. | Narrowed to sparse planner-exploited errors and update target. | Control papers often report task metrics. |
-| 6 | Row guard over-repairs artificially. | Kept as provocative broad-guard failure/success case. | Needs realistic learned guards. |
-| 7 | Online sys-ID and residual learning are close. | Maintained hostile boundary; no new experiment added. | Needs stronger baseline in future. |
-| 8 | No stochasticity or partial observability. | Listed as limitation. | Non-recoverable locally. |
-| 9 | Stale patches may become unsafe. | Listed stale-patch retirement as future work. | Not implemented. |
-| 10 | Reproducibility lacks threshold artifacts. | README and paper now list threshold outputs. | Long evidence run takes several minutes. |
+| 1 | Exact CCRA is just one-mismatch transition blocking. | Conceded and formalized with threshold-delay sweep. | Novelty must stay on planner-facing repair contract. |
+| 2 | Prediction-gated threshold 8 is arbitrary. | Swept thresholds 1, 2, 4, 8, 16, 32. | Adaptive thresholds remain future work. |
+| 3 | Formal lemma is trivial. | Kept as interface pin-down only. | Reviewers may still want deeper theory. |
+| 4 | Evidence is toy grid. | Expanded to 34,880-row full-scale simulation pass with seven suites. | Still no real robot. |
+| 5 | Prediction loss is a strawman. | Reported task success, global prediction error, control-weighted error, counterexamples, and false blocks. | Control literature often already reports task metrics. |
+| 6 | Row guard over-repairs artificially. | Added guard-scope suite with precision/recall/false-block accounting. | Learned guards are not solved. |
+| 7 | Online sys-ID and residual learning are close. | Kept hostile boundary and emphasized immediate planner-facing transition contract. | Richer learned baselines remain future work. |
+| 8 | No stochasticity. | Added stochastic contradiction suite. | Simple Bernoulli faults only. |
+| 9 | Stale patches may become unsafe. | Added nonstationary/retirement suite. | Real stale-patch validation remains future work. |
+| 10 | Oracle/planner may be weak. | Rejected row-only planner and reran with corrected set-based A*. | Still finite-grid planning. |
+| 11 | Reproducibility at scale. | Added summarize-only path and compact streamed CSV rows. | Full run still takes time. |
 
 ## Stop Condition
 
-Stopped before 50 rounds because recoverable issues converged on the same honest boundary: paper 03 is a deterministic proxy showing planner-facing repair value, not a scalable robot world-model result. Threshold sweep, CI reporting, docs, and claim narrowing were completed.
+The v3 pass completed the recoverable local scope: corrected runner, full-scale streamed experiments, stronger baselines, ablations, stress tests, paper-ready figures/tables, a 25-page final manuscript, and explicit limitations. Remaining issues require hardware, high-fidelity simulation, or learned guard formation.
