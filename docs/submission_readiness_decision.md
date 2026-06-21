@@ -17,3 +17,15 @@ It is not real-robot evidence. A top robotics submission would need hardware or 
 ## Terminal Condition
 
 Paper 03 is complete for this batch once the final 25-page PDF is verified at `C:/Users/wangz/Downloads/03.pdf`, docs/logs are updated, and the final repo state is committed and pushed.
+
+## 2026-06-21 VLA Highlight Gate
+
+Passed. The canonical PDF at `C:/Users/wangz/Downloads/03.pdf` remains 25 pages and now has an explicit VLA-v4 boxed-link policy in source.
+
+- Size: 553,427 bytes
+- SHA256: `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`
+- Link annotations: 79 total; green = 68, red = 11, cyan = 0
+- Link-bearing pages: `[(1, 26), (3, 36), (6, 3), (7, 1), (8, 4), (9, 2), (17, 6), (18, 1)]`
+- Border widths: `(0, 0, 1)` for all annotations
+- Visual audit: pages 1, 3, 6, 7, 8, 9, 17, and 18 rendered and inspected
+- Cleanup: zero malformed page-edge annotations, no duplicate `3.pdf`, and no local `paper/main.pdf`

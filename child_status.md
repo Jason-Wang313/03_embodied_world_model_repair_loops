@@ -22,7 +22,7 @@
   - pushed `master` to `origin/master` -> `git_push_exit=0`
 - Findings:
   - Final thesis: planner-facing counterexample-conditioned repair loops for robot world models.
-  - Final PDF exists at `C:\Users\wangz\Downloads\03.pdf`, 197056 bytes, SHA256 `1C81652DC03BF3AF2E9F54B9D404A95FF6092C040673A7FB92B7D547043654EE`.
+  - Final PDF exists at `C:\Users\wangz\Downloads\03.pdf`, 553427 bytes, SHA256 `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`.
   - Desktop copy status is `pending orchestrator copy`.
   - Large cache `results/openalex_cache.jsonl` is ignored by `.gitignore` and was not pushed.
 - Failures:
@@ -39,7 +39,7 @@ PDF exists: True
 ## Submission Hardening v2
 
 Completed: 2026-06-12 19:42:00 +01:00
-Terminal decision: workshop-only
+Terminal decision: superseded by the v3 full-scale final decision
 Canonical PDF: C:/Users/wangz/Downloads/03.pdf
 
 Key changes:
@@ -48,3 +48,17 @@ Key changes:
 - Added `paper/figures/threshold_table.tex` and `results/threshold_sweep.csv`.
 - Narrowed claims after threshold 1 matched exact CCRA in the deterministic toy grid.
 - Recompiled paper and replaced the canonical Downloads PDF.
+
+## VLA Highlight Hardening
+
+Completed: 2026-06-21
+Canonical PDF: C:/Users/wangz/Downloads/03.pdf
+
+Key changes:
+- Added explicit VLA-v4 boxed-link `\hypersetup` in `paper/main.tex`.
+- Rebuilt with manual `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` passes and replaced the canonical Downloads PDF only after verification.
+- Verified final PDF is 25 pages, 553,427 bytes, SHA256 `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`.
+- Verified 79 link annotations on pages `[(1, 26), (3, 36), (6, 3), (7, 1), (8, 4), (9, 2), (17, 6), (18, 1)]`.
+- Verified link colors match the role model: green = 68, red = 11, cyan = 0, with all borders `(0, 0, 1)`.
+- Rendered and visually inspected all link-bearing pages: 1, 3, 6, 7, 8, 9, 17, and 18.
+- Confirmed zero malformed page-edge annotations, no duplicate `C:/Users/wangz/Downloads/3.pdf`, and no leftover local `paper/main.pdf`.
