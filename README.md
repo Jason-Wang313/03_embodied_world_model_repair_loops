@@ -53,3 +53,18 @@ pdflatex main.tex
 - Nonstationary suite shows stale false blocks without retirement.
 
 The final local manuscript build is 25 pages. The canonical batch PDF is copied to `C:/Users/wangz/Downloads/03.pdf` only after final verification.
+
+## Current Artifact
+
+2026-06-21 VLA highlight hardening verified the canonical Downloads PDF against the visible VLA-v4 boxed-link role model.
+
+- Canonical PDF: `C:/Users/wangz/Downloads/03.pdf`
+- Pages: 25
+- Size: 553,427 bytes
+- SHA256: `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`
+- Link annotations: 79 total on pages `[(1, 26), (3, 36), (6, 3), (7, 1), (8, 4), (9, 2), (17, 6), (18, 1)]`
+- Link colors: green = 68, red = 11, cyan = 0
+- Link borders: `(0, 0, 1)` for all annotations
+- Oversized page-edge annotation audit: 0 malformed rectangles
+- Visual audit: pages 1, 3, 6, 7, 8, 9, 17, and 18 rendered and inspected with crisp green citation/URL boxes and red internal-reference boxes.
+- Cleanup: no duplicate `C:/Users/wangz/Downloads/3.pdf`; local `paper/main.pdf` removed after export.

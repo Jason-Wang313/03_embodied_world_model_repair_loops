@@ -5,6 +5,8 @@
 - Final manuscript target: at least 25 pages of real content.
 - Verified final Downloads copy: 25 pages.
 - No intermediate PDF was copied to Downloads before the final gate.
+- 2026-06-21 canonical PDF after VLA boxed-link hardening: `C:/Users/wangz/Downloads/03.pdf`, 25 pages, 553,427 bytes, SHA256 `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`.
+- Final link inventory: 79 annotations; green = 68, red = 11, cyan = 0; all borders `(0, 0, 1)`; zero malformed page-edge rectangles.
 
 ## Full-Scale Run
 
@@ -33,3 +35,10 @@
 - Row guards solve but over-block: stress false-block rate 0.87 and control-weighted error 0.264.
 - Guard-scope suite shows action/global guards fail from overgeneralization.
 - Nonstationary suite shows exact CCRA accumulates stale false blocks without retirement.
+
+## Visual Delivery Check
+
+- VLA-style boxed links are explicitly pinned in `paper/main.tex`.
+- Link-bearing pages rendered and inspected: 1, 3, 6, 7, 8, 9, 17, and 18.
+- Visual result matches the visible VLA-v4 role model: green citation/URL boxes and red internal-reference boxes, with no cyan boxes.
+- No local `paper/main.pdf` remains after export, and no duplicate non-canonical `3.pdf` exists in Downloads.

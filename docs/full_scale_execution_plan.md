@@ -176,3 +176,12 @@ Target 26-28 pages after normal ICLR formatting. Use the main text for the core 
 - Docs/logs/reproducibility materials updated to v3 final status.
 - Local generated `paper/main.pdf` removed after final copy.
 - Repo clean, committed, pushed, and upstream verified before moving to Paper 04.
+
+## 2026-06-21 VLA Highlight Addendum
+
+- Explicit VLA-v4 boxed-link policy added to `paper/main.tex`.
+- Final artifact remains `C:\Users\wangz\Downloads\03.pdf`.
+- Verified final PDF: 25 pages, 553,427 bytes, SHA256 `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`.
+- Verified link inventory: 79 annotations; green = 68, red = 11, cyan = 0; all borders `(0, 0, 1)`.
+- Rendered and visually inspected all link-bearing pages: 1, 3, 6, 7, 8, 9, 17, and 18.
+- Verified zero malformed page-edge rectangles, no duplicate `3.pdf`, and no leftover local `paper/main.pdf`.

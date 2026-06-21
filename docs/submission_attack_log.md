@@ -20,7 +20,10 @@ Date: 2026-06-13 20:15:00 +01:00
 | 9 | Stale patches may become unsafe. | Added nonstationary/retirement suite. | Real stale-patch validation remains future work. |
 | 10 | Oracle/planner may be weak. | Rejected row-only planner and reran with corrected set-based A*. | Still finite-grid planning. |
 | 11 | Reproducibility at scale. | Added summarize-only path and compact streamed CSV rows. | Full run still takes time. |
+| 12 | PDF link boxes must visually match the visible VLA-v4 role model. | Added explicit hyperref boxed-link policy, rebuilt, rendered all link-bearing pages, and verified green citation/URL boxes plus red internal-reference boxes. | Visual style is verified for this artifact; future source edits must preserve the policy. |
 
 ## Stop Condition
 
 The v3 pass completed the recoverable local scope: corrected runner, full-scale streamed experiments, stronger baselines, ablations, stress tests, paper-ready figures/tables, a 25-page final manuscript, and explicit limitations. Remaining issues require hardware, high-fidelity simulation, or learned guard formation.
+
+The 2026-06-21 VLA highlight-hardening pass completed visual delivery scope: `C:/Users/wangz/Downloads/03.pdf` is 25 pages, 553,427 bytes, SHA256 `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`, with 79 role-model-style link annotations and zero malformed page-edge rectangles.

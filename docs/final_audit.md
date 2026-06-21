@@ -62,7 +62,17 @@ It remains not hardware-ready. A robotics main-conference path would need real r
 
 Final Downloads PDF verified after copy: 25 pages, 553,427 bytes.
 
-Marker check on the Downloads PDF passed for: `Submission-hardening`, `ROBOTICS_1_60`, `Decision:`, `workshop-only`, and `Downloads`.
+2026-06-21 VLA highlight-hardening verification:
+
+- SHA256: `3EBEAABFAC96FA12774A6441F4CF1CCDB28DAE78A0F55212AC18AD3585611F8D`
+- Link annotations: 79 total on pages `[(1, 26), (3, 36), (6, 3), (7, 1), (8, 4), (9, 2), (17, 6), (18, 1)]`
+- Colors: green = 68, red = 11, cyan = 0
+- Borders: `(0, 0, 1)` for all annotations
+- Oversized page-edge annotation audit: 0 malformed rectangles
+- Visual audit: pages 1, 3, 6, 7, 8, 9, 17, and 18 rendered and inspected
+- Cleanup: no duplicate `C:/Users/wangz/Downloads/3.pdf`; local `paper/main.pdf` removed after export
+
+Marker check on the Downloads PDF passed for: `34,880`, `252.3`, `1.00 success`, `0.87`, `0.264`, `Counterexample-Conditioned Repair Automata`, `CCRA`, and `claim`.
 
 ## 10. GitHub URL
 
